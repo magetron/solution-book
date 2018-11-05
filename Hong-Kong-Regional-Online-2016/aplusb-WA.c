@@ -2,7 +2,7 @@
 #include "stdlib.h"
 #include "string.h"
 #define max_n 200000
-#define max_sum 100000
+#define max_sum 100005
 
 int cmp(const void *p, const void *q) {
 	int l = *(int *)p;
@@ -12,7 +12,7 @@ int cmp(const void *p, const void *q) {
 
 int n;
 int a[max_n];
-int ans[max_sum][2];
+int ans[max_sum * 2][2];
 long long ans_s;
 
 int init () {
@@ -29,9 +29,9 @@ int main () {
 	qsort(a, n, sizeof(int), cmp);
 	//for (int i = 0; i < n; i++) printf("%d ", a[i]);
 	for (int i = 0; i < n; i++) 
-		for (int j = i; j < n; j++) {
+		for (int j = i + 1; j < n; j++) {
 			ans[a[i] + a[j] + max_sum / 2][0] = 1; 
-			if (i != j) ans[a[i] + a[j] + max_sum / 2][1] += 2;
+			ans[a[i] + a[j] + max_sum / 2][1] += 2;
 		}
 	for (int i = 0; i < n; i++) if (ans[a[i] + max_sum / 2][0] == 1) ans_s += ans[a[i] + max_sum / 2][1];
 	printf("%lld\n", ans_s);
