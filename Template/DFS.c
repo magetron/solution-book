@@ -55,10 +55,9 @@ void DFS(int cur_node) {
 
 
 int main () {
-	freopen("BFS.in", "r", stdin);
-	freopen("BFS.ans", "w", stdout);
+	freopen("Graph.in", "r", stdin);
+	freopen("DFS.ans", "w", stdout);
 	init_graph();
 	read_graph();
 	doDFS();
 }
-	
