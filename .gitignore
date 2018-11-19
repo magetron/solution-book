@@ -1,2 +1,5 @@
-Visa
-.DS_Store
+*
+!*.c
+!*.cc
+!*.in
+
