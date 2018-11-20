@@ -1,5 +1,6 @@
-*
-!*.py
-!*.c
-!*.cc
+*.ans
+*.out
+*.in
+*.swp
+.DS_Store
 
