@@ -1,5 +1,2 @@
-*
-!*.c
-!*.cc
-!*.in
-
+.DS_Store
+*.out
