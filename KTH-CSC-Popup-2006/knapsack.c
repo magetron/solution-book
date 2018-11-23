@@ -16,6 +16,7 @@ void do_work (double capacity, int n) {
 	//printf("cap = %lf n = %d\n", capacity, n);
 	memset(max_value, 0, sizeof(max_value));
 	int cp = (int) capacity;
+	//printf("cap = %d\n", cp);
 	item items[n];
 	memset(items, 0, sizeof(items));
 	for (int i = 0; i < n; i++) scanf("%d %d", &items[i].value, &items[i].weight);
@@ -26,10 +27,15 @@ void do_work (double capacity, int n) {
 				max_value[i][j] = max_value[i - 1][j];
 				if (j >= items[i].weight) {
 					int tmp = max_value[i - 1][j - items[i].weight] + items[i].value;
+					//if (j == 100) {
+					//	printf("new max_value[%d][100] = %d\n", i, max_value[i][j]);
+					//	printf("tmp cmp value = %d\n", tmp);
+					//}
 					max_value[i][j] = ( tmp > max_value[i][j]) ? tmp : max_value[i][j];
-				} else {
-					if (j >= items[0].weight) max_value[0][j] = items[0].value;
 				}
+			} else {
+				if (j >= items[0].weight) max_value[0][j] = items[0].value;
+				//if (j == 100) printf("new max_value[%d][100] = %d\n", i, max_value[0][j]);
 			}
 	//printf("%d\n", max_value[n - 1][cp]);
 	
@@ -41,14 +47,14 @@ void do_work (double capacity, int n) {
 	memset(ansarr, 0, sizeof(ansarr));
 	while (i > 0) {
 		//printf("i = %d j = %d\n", i, j);
-		if (max_value[i][j] == max_value[i - 1][j - items[i].weight] + items[i].value) {
+		if ((j - items[i].weight >= 0) && (items[i].value > 0) && (max_value[i][j] == max_value[i - 1][j - items[i].weight] + items[i].value)) {
 			ansarr[ans] = i;
 			ans ++;
 			j -= items[i].weight;
 		}
 		i --;
 	}
-	if (max_value[0][j] == items[0].value) {
+	if ((max_value[0][j] == items[0].value) && (items[0].value > 0)) {
 		ansarr[ans] = i;
 		ans ++;
 	}
@@ -59,12 +65,12 @@ void do_work (double capacity, int n) {
 }
 
 int main () {
-	freopen("knapsack.in", "r", stdin);
+	//freopen("knapsack.in", "r", stdin);
 	//freopen("knapsack.ans", "w", stdout);
 	double c;
 	int n;
 	while (scanf("%lf %d", &c, &n) != EOF) do_work(c, n);
-	fclose(stdin);
+	//fclose(stdin);
 	//fclose(stdout);
 }
 
