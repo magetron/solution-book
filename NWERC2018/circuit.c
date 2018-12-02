@@ -1,46 +1,48 @@
-#include "stdlib.h"
-#define max_children 1000
+#include "stdio.h"
+#include "math.h"
+#include "string.h"
+#define PI 3.141592653589
+#define max_n 1005
 
-typedef struct node {
-	struct node *parent;
-	int children_count;
-	struct node *children[max_children];
-	int key, all_children_count;
-	double x, y;
-	double a_s, a_e;
-} node;
+typedef struct {
+	double x;
+	double y;
+} coordinate;
 
-node *new_node (int key, int children_count) {
-	node *tmp = malloc(sizeof(node));
-	tmp -> key = key;
-	tmp -> children_count = 0;
-	tmp -> all_children_count = 0;
-	tmp -> parent = NULL;
-	memset(tmp -> children, NULL, sizeof(tmp -> children));
-	return tmp;
-}
+coordinate pos[max_n];
+short int adj[max_n][max_n];
+short int count = 0;
+short int n;
 
-void add_node_under (node *root, int key) {
-	node *tmp = malloc(sizeof(node));
-	tmp -> key = key;
-	tmp -> children_count = 0;
-	root -> children[root -> children_count] = tmp;
-	root -> children_count ++;
+void solve (int current_node, int parent) {
+	for (int i = 1; i <= adj[current_node][0]; i++) {
+		short int k = adj[current_node][i];
+		if (k != parent) {
+			pos[k].x = pos[current_node].x + cos(count * PI / n);
+			pos[k].y = pos[current_node].y + sin(count * PI / n);
+			count ++;
+			solve(k, current_node);
+		}
+	}
 }
 
 
 
 int main () {
-	scanf("%d", &n);
+	scanf("%hd", &n);
+	short int a, b;
+	memset(adj, 0, sizeof(adj));
 	for (int i = 0; i < n - 1; i++) {
-		scanf("%d %d", tmp_a, tmp_b);
-		if (tmp_a > tmp_b) swap(tmp_a, tmp_b);
-		tree[tmp_a][0] ++;
-		tree[tmp_a][tree[tmp_a][0]] = tmp_b;
+		scanf("%hd%hd", &a, &b);
+		a--;
+		b--;
+		adj[a][0]++;
+		adj[a][adj[a][0]] = b;
+		adj[b][0]++;
+		adj[b][adj[b][0]] = a;
 	}
-	//read input into an array
-	root = new_node(1, tree[1][0]);
-	for (int i = 1; i <= n; i++) {
-		
-		
-	}
+	memset(pos, 0, sizeof(pos));
+	solve(0, -1);
+	for (int i = 0; i < n; i++) printf("%.8f %.8f\n", pos[i].x, pos[i].y);
+	return 0;
+}
