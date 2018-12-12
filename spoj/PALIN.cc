@@ -19,21 +19,30 @@ bool is_number (char a) {
 	if ( (a >= '0') && (a <= '9') ) return true; else return false;
 }
 
-void plus_one (char *a) {
+
+bool escape_flag = false;
+
+void plus_one (char *a, int full_length) {
 	int len = strlen(a);
 	for (int i = len - 1; i >= 0; i--) {
 		a[i] ++;
 		if (is_number(a[i])) return;
 		else a[i] -= 10;
 	}
-	a[len] = 1;
-	a[len + 1] = '\0';
+	cout << 1;
+	for (int i = 0; i < full_length - 1; i++) cout << 0;
+	cout << 1 << endl;
+	escape_flag = true;
 }
 
 
 
 void do_work () {
 	char raw_str[max_string_length], str[max_string_length], palin_str[max_string_length], half_str[max_string_length];
+	memset(raw_str, 0, sizeof(raw_str));
+	memset(str, 0, sizeof(str));
+	memset(palin_str, 0, sizeof(palin_str));
+	memset(half_str, 0, sizeof(half_str));
 	cin >> raw_str;
 	int raw_len = strlen(raw_str);
 	int p = -1;
@@ -45,8 +54,8 @@ void do_work () {
 		str[0] = '0';
 		str[1] = '\0';
 	}
-	memset(palin_str, 0, sizeof(palin_str));
-	memset(half_str, 0, sizeof(half_str));
+	//cout << str << endl;
+	escape_flag = false;
 	int len = strlen(str);
 	int half_len = len / 2;
 	bool is_even_length = false;
@@ -64,16 +73,21 @@ void do_work () {
 	//cout << half_str << endl;
 	if (bigger(palin_str, str)) cout << palin_str << endl; 
 	else {
-		plus_one(half_str);
-		cout << half_str << endl;
-		half_len = strlen(half_str);
-		memset(palin_str, 0, sizeof(palin_str));
-		for (int i = 0; i < half_len; i++) {
-			palin_str[i] = half_str[i];
-			palin_str[len - i - 1] = half_str[i];
+		plus_one(half_str, len);
+		//cout << len << endl;
+		//cout << half_str << endl;
+		if (!escape_flag) {
+			//half_len = strlen(half_str);
+			memset(palin_str, 0, sizeof(palin_str));
+			//cout << half_len << endl;
+			for (int i = 0; i < half_len; i++) {
+				//cout << palin_str << endl;
+				palin_str[i] = half_str[i];
+				palin_str[len - i - 1] = half_str[i];
+			}
+			if (!is_even_length) palin_str[half_len] = half_str[half_len];
+			cout << palin_str << endl;
 		}
-		if (!is_even_length) palin_str[half_len] = half_str[half_len];
-		cout << palin_str << endl;
 	}
 }
 
