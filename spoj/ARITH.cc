@@ -19,15 +19,13 @@ void upper_output (char* a, char* b, char op) {
 		int b_len = strlen(b);
 		if (a_len > b_len) {
 			int gap = a_len - b_len;
-			cout << " ";
 			cout << a << endl;
+			for (int i = 0; i < gap - 1; i++) cout << " ";
 			cout << op;
-			for (int i = 0; i < gap; i++) cout << " ";
 			cout << b << endl;
 		} else {
 			int gap = b_len - a_len;
-			cout << " ";
-			for (int i = 0; i < gap; i++) cout << " ";
+			for (int i = 0; i < gap - 1; i++) cout << " ";
 			cout << a << endl;
 			cout << op;
 			cout << b << endl;
@@ -60,7 +58,7 @@ void prec_plus (char *a, char *b) {
 			result[i + 1] += 1;
 		}
 	}
-	if (result[result_len] > 0) result_len++; else cout << " ";
+	if (result[result_len] > 0) result_len++;
 	for (int i = result_len - 1; i >= 0; i--) cout << result[i];
 	cout << endl;
 	return;
@@ -97,9 +95,75 @@ void prec_minus (char *a, char *b) {
 	cout << result[0] << endl;
 }
 
+void prec_multiply(char *a, char *b) {
+	short int a_num[number_length];
+	short int b_num[number_length];
+	memset(a_num, -1, sizeof(a_num));
+	memset(b_num, -1, sizeof(b_num));
+	int a_len = strlen(a);
+	int b_len = strlen(b);
+	for (int i = a_len - 1; i >= 0; i--) a_num[a_len - i - 1] = a[i] - 48;
+	for (int i = b_len - 1; i >= 0; i--) b_num[b_len - i - 1] = b[i] - 48;
+	int result[number_length][number_length];
+	memset(result, 0, sizeof(result));
+	for (int i = 0; i < b_len; i++) {
+		int b_mul = b_num[i];
+		for (int j = 0; j < a_len; j++) {
+			result[i][j] += a_num[j] * b_mul;
+			if (result[i][j] >= 10) {
+				result[i][j + 1] += result[i][j] / 10;
+				result[i][j] %= 10;
+			}
+		}
+	}
+	int pre_gap;
+	if  (result[b_len - 1][a_len] != 0) pre_gap = a_len; else pre_gap = a_len - 1;
+	cout << "a_len = " << a_len << endl;
+	cout << "pre_gap = " << pre_gap << endl;
+	if (a_len > b_len) {
+		int gap = a_len - b_len;
+		cout << " ";
+		for (int i = 0; i < pre_gap - 1; i++) cout << " ";
+		cout << a << endl;
+		for (int i = 0; i < gap; i++) cout << " ";
+		for (int i = 0; i < pre_gap - 1; i++) cout << " ";
+		cout << "*";
+		cout << b << endl;
+	} else {
+		int gap = b_len - a_len;
+		cout << " ";
+		for (int i = 0; i < gap; i++) cout << " ";
+		for (int i = 0; i < pre_gap - 1; i++) cout << " ";
+		cout << a << endl;
+		for (int i = 0; i < pre_gap - 1; i++) cout << " ";
+		cout << "*";
+		cout << b << endl;
+	}
+	int line_len = max(a_len, b_len) + 1;
+	for (int i = 0; i < pre_gap - 1; i++) cout << " ";
+	for (int i = 0; i < line_len; i++) cout << '-';
+	cout << endl;
+	int line = 0;
+	int print_count = b_len;
+	while (print_count > 0) {
+		for (int i = 0; i < print_count - 1; i++) cout << " ";	
+		bool prefix_zero = true;
+		for (int i = a_len; i > 0; i--) {
+			if (result[b_len - print_count][i] > 0) prefix_zero = false; 
+			if (prefix_zero) cout << " "; else cout << result[b_len - print_count][i];
+		}
+		cout << result[b_len - print_count][0] << endl;
+		print_count--;
+	}
+}
+
+
+
+
 void result (char *a, char *b, char op) {
 	if ( op == '+' ) prec_plus(a, b);
 	if ( op == '-' ) prec_minus(a, b);
+	if ( op == '*' ) prec_multiply(a, b);
 }
 		
 
