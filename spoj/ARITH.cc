@@ -66,13 +66,13 @@ void print_expression(short int *a, int a_len, short int *b, int b_len, char op)
 			cout << op;
 			for (int i = b_len - 1; i >= 0; i--) cout << b[i];
 			cout << endl;
-			if (result_len
+			for (int i = 0; i < max(a_len, b_len + 1); i++) cout << '-';
+			cout << endl;
+			if ( result_len < max(a_len, b_len + 1) ) cout << ' ';
 			for (int i = result_len - 1; i >= 0; i--) cout << result[i];
 			cout << endl;
 			break;
 	}
-		
-
 }
 
 void do_work () {
