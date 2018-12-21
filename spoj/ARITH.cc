@@ -72,13 +72,87 @@ void print_expression(short int *a, int a_len, short int *b, int b_len, char op)
 			for (int i = result_len - 1; i >= 0; i--) cout << result[i];
 			cout << endl;
 			break;
+		case '*':
+			int tmp_result[number_length][expression_length];
+			memset(tmp_result, 0, sizeof(tmp_result));
+			for (int i = 0; i < b_len; i++) 
+				for (int j = 0; j < a_len; j++) {
+					tmp_result[i][j + i] += a[j] * b[i];
+					if (tmp_result[i][j + i] >= 10) {
+						tmp_result[i][j + i + 1] += tmp_result[i][j + i] / 10;
+						tmp_result[i][j + i] %= 10;
+					}
+				}
+			// test tmp_result output
+			//for (int i = 0; i < b_len; i++) {
+			//	for (int j = a_len + b_len - 1; j >= 0; j--) cout << tmp_result[i][j];
+			//	cout << endl;
+			//}
+			for (int i = 0; i < b_len; i++) 
+				for (int j = 0; j < a_len + 1; j++)
+					result[j + i] += tmp_result[i][j + i];
+			for (int i = 0; i < a_len + b_len - 1; i++) if (result[i] >= 10) {
+				result[i + 1] += result[i] / 10;
+				result[i] %= 10;
+			}
+			for (int i = a_len + b_len - 1; i >= 0; i--) if (result[i] != 0) {
+				result_len = i + 1;
+				break;
+			}
+			
+			int pre_gap = result_len - max(a_len, b_len + 1);
+			//cout << "pre_gap = " << pre_gap << endl;
+			for (int i = 0; i < pre_gap; i++) cout << ' ';
+			for (int i = 0; i < b_len + 1 - a_len; i++) cout << ' ';
+			for (int i = a_len - 1; i >= 0; i--) cout << a[i];
+			cout << endl;
+			
+			for (int i = 0; i < pre_gap; i++) cout << ' ';
+			for (int i = 0; i < a_len - b_len - 1; i++) cout << ' ';
+			cout << op;
+			for (int i = b_len - 1; i >= 0; i--) cout << b[i];
+			cout << endl;
+			
+			for (int i = 0; i < pre_gap - 1; i++) cout << ' ';
+			int first_result_length = 0;
+			for (int i = a_len; i >= 0; i--) if (tmp_result[0][i] > 0) {
+				first_result_length = i + 1;
+				break;
+			}
+			if ( (first_result_length <= max(a_len, b_len + 1)) && (pre_gap > 0) ) cout << ' ';
+			for (int i = 0; i < max(first_result_length, max(a_len, b_len + 1) ); i++) cout << '-';
+			cout << endl;
+			
+			if (b_len > 1) {
+				for (int i = 0; i < b_len; i++) {
+					int tmp_result_len = result_len;
+					if ( (result_len == max_len) && (b_len + 1 > a_len) ) tmp_result_len++;
+					bool prefix_zero = true;
+					for (int j = tmp_result_len - 1; j >= i + 1; j--) {
+						if ((prefix_zero) && (tmp_result[i][j] != 0)) prefix_zero = false;
+						if (!prefix_zero) cout << tmp_result[i][j]; else cout << ' ';
+					}
+					cout << tmp_result[i][i];
+					cout << endl;
+				}
+
+				if ( (result_len == max_len) && (b_len + 1 > a_len) ) cout << ' ';
+				for (int i = 0; i < result_len; i++) cout << '-';
+				cout << endl;
+			}
+
+			
+			if ( (result_len == max_len) && (b_len + 1 > a_len) ) cout << ' ';
+			for (int i = result_len - 1; i >= 0; i--) cout << result[i];
+			cout << endl;
+			break;
 	}
 }
 
 void do_work () {
 	char expression[expression_length];
 	cin >> expression;
-	cout << "expression = " << expression << endl;
+	//cout << "expression = " << expression << endl;
 	int exp_len = strlen(expression);
 	char op;
 	short int a[number_length], b[number_length];
@@ -112,9 +186,11 @@ int main () {
 	ios_base :: sync_with_stdio(false);
 	cin.tie(NULL);
 	freopen("ARITH.in", "r", stdin);
+	freopen("ARITH.ans", "w", stdout);
 	int n;
 	cin >> n;
 	for (int i = 0; i < n; i++) do_work();
 	fclose(stdin);
+	fclose(stdout);
 	return 0;
 }
