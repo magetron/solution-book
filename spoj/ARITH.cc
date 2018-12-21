@@ -17,6 +17,7 @@ void print_expression(short int *a, int a_len, short int *b, int b_len, char op)
 	memset(result, 0, sizeof(result));
 	int max_len = max(a_len, b_len);
 	int result_len = max_len;
+	bool prefix_zero = true;
 	switch ( op ) {
 		case '+':
 			for (int i = 0; i < max_len; i++) {
@@ -54,21 +55,29 @@ void print_expression(short int *a, int a_len, short int *b, int b_len, char op)
 					result[i + 1] --;
 				}
 			}
-			if (result[result_len - 1] == 0) result_len --;
-			if (result_len < 1) result_len = 1;
+			for (int i = max_len - 1; i >= 0; i--) if (result[i] != 0) {
+				result_len = i + 1;
+				break;
+			}
+
 			// test result output
 			//for (int i = result_len - 1; i >= 0; i--) cout << result[i];
 			//cout << endl;
+			
 			for (int i = 0; i < b_len + 1 - a_len; i++) cout << ' ';
 			for (int i = a_len - 1; i >= 0; i--) cout << a[i];
 			cout << endl;
+			
 			for (int i = 0; i < a_len - b_len - 1; i++) cout << ' ';
 			cout << op;
 			for (int i = b_len - 1; i >= 0; i--) cout << b[i];
 			cout << endl;
-			for (int i = 0; i < max(a_len, b_len + 1); i++) cout << '-';
+
+			for (int i = 0; i < max(a_len, b_len + 1) - max(result_len, b_len + 1); i++) cout << ' ';
+			for (int i = 0; i < max(result_len, b_len + 1); i++) cout << '-';
 			cout << endl;
-			if ( result_len < max(a_len, b_len + 1) ) cout << ' ';
+			
+			for (int i = 0; i < max(a_len, b_len + 1) - result_len; i++) cout << ' ';
 			for (int i = result_len - 1; i >= 0; i--) cout << result[i];
 			cout << endl;
 			break;
@@ -120,14 +129,15 @@ void print_expression(short int *a, int a_len, short int *b, int b_len, char op)
 				break;
 			}
 			if ( (first_result_length <= max(a_len, b_len + 1)) && (pre_gap > 0) ) cout << ' ';
-			for (int i = 0; i < max(first_result_length, max(a_len, b_len + 1) ); i++) cout << '-';
+			for (int i = 0; i < a_len - max(b_len + 1, first_result_length); i++) cout << ' ';
+			for (int i = 0; i < max(first_result_length, b_len + 1); i++) cout << '-';
 			cout << endl;
 			
 			if (b_len > 1) {
 				for (int i = 0; i < b_len; i++) {
 					int tmp_result_len = result_len;
 					if ( (result_len == max_len) && (b_len + 1 > a_len) ) tmp_result_len++;
-					bool prefix_zero = true;
+					prefix_zero = true;
 					for (int j = tmp_result_len - 1; j >= i + 1; j--) {
 						if ((prefix_zero) && (tmp_result[i][j] != 0)) prefix_zero = false;
 						if (!prefix_zero) cout << tmp_result[i][j]; else cout << ' ';
@@ -185,12 +195,12 @@ void do_work () {
 int main () {
 	ios_base :: sync_with_stdio(false);
 	cin.tie(NULL);
-	freopen("ARITH.in", "r", stdin);
-	freopen("ARITH.ans", "w", stdout);
+	//freopen("ARITH.in", "r", stdin);
+	//freopen("ARITH.ans", "w", stdout);
 	int n;
 	cin >> n;
 	for (int i = 0; i < n; i++) do_work();
-	fclose(stdin);
-	fclose(stdout);
+	//fclose(stdin);
+	//fclose(stdout);
 	return 0;
 }
