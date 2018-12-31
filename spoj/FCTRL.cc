@@ -3,7 +3,7 @@
 using namespace std;
 
 void do_work () {
-	long long n;
+	int n;
 	cin >> n;
 	int zeros = 0;
 	int fives = n / 5;
