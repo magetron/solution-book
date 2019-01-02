@@ -106,7 +106,7 @@ Limit the taps required to complete a certain action.
 
 ### Resources
 
-[Progressive Web Apps](bit.ly/pwaebook)
+[Progressive Web Apps](https://www.awwwards.com/PWA-ebook/)
 
 
 
