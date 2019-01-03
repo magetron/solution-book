@@ -1,5 +1,7 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "limits.h"
+#define max_q 2000005
 
 typedef struct node {
 	int key;
@@ -17,7 +19,7 @@ int height (node *root) {
 }
 
 node *new_node (int key) {
-	node *tmp_node;
+	node *tmp_node = (node *) malloc( sizeof(node) );
 	tmp_node -> key = key;
 	tmp_node -> left = NULL;
 	tmp_node -> right = NULL;
@@ -85,19 +87,42 @@ node *insert(node *root, int key) {
 	return root;
 }
 
-int find_by_key (node *root, int key) {
-	if (root -> key == key) return count;
+int count;
+
+short int found;
+
+void find_by_key (node *root, int key) {
+	if ( (!found) && (root != NULL) )  {
+		find_by_key(root -> left, key);
+		count++;
+		if (root -> key == key) {
+			found = 1;
+			printf("%d\n", count);
+		}
+		find_by_key(root -> right, key);
+	}
+}
+	
 
 
 int main () {
+	//freopen("SDITSAVL.in", "r", stdin);
 	int n;
 	scanf("%d", &n);
+	node *root = NULL;
 	for (int i = 0; i < n; i++) {
 		short int op;
 		int num;
-		scanf("%d%d", &op, &num);
-		if (op == 1) insert(num);
-
+		scanf("%hd%d", &op, &num);
+		if (op == 1) root = insert(root, num);
+		if (op == 2) {
+			count = 0;
+			found = 0;
+			find_by_key(root, num);
+			if (!found) printf("Data tidak ada\n");
+		}
+	}
+	//fclose(stdin);
 	return 0;
 }
 
