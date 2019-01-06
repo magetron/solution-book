@@ -7,6 +7,8 @@ typedef struct node {
 	int key;
 	struct node *left;
 	struct node *right;
+	int left_child;
+	int right_child;
 	int height;
 } node;
 
@@ -18,12 +20,14 @@ int height (node *root) {
 	return (root == NULL) ? 0 : root -> height;
 }
 
-node *new_node (int key) {
+node *new_node (int key, int left_child, int right_child) {
 	node *tmp_node = (node *) malloc( sizeof(node) );
 	tmp_node -> key = key;
 	tmp_node -> left = NULL;
 	tmp_node -> right = NULL;
 	tmp_node -> height = 1;
+	tmp_node -> left_child = left_child;
+	tmp_node -> right_child = right_child;
 	return tmp_node;
 }
 
@@ -36,6 +40,9 @@ node *right_rotate (node *y) {
 
 	y -> height = max( height(y -> left), height(y -> right) ) + 1;
 	x -> height = max( height(x -> left), height(x -> right) ) + 1;
+	
+	if (T2 != NULL) y -> left_child = T2 -> left_child + T2 -> right_child + 1; else y -> left_child = 0;
+	x -> right_child = y -> left_child + y -> right_child + 1;
 
 	return x;
 }
@@ -49,6 +56,9 @@ node *left_rotate (node *x) {
 
 	x -> height = max( height(x -> left), height(x -> right) ) + 1;
 	y -> height = max( height(y -> left), height(y -> right) ) + 1;
+
+	if (T2 != NULL) x -> right_child = T2 -> left_child + T2 -> right_child + 1; else x -> right_child = 0;
+	y -> left_child = x -> left_child + x -> right_child + 1;
 	
 	return y;
 }
@@ -60,9 +70,15 @@ int get_balance_factor (node *root) {
 
 node *insert(node *root, int key) {
 	// std bst insertion
-	if (root == NULL) return new_node(key);
-	if (key < root -> key) root -> left = insert(root -> left, key);
-	else if (key > root -> key) root -> right = insert(root -> right, key);
+	if (root == NULL) return new_node(key, 0, 0);
+	if (key < root -> key) {
+		root -> left = insert(root -> left, key);
+		root -> left_child++;
+	}
+	else if (key > root -> key) {
+		root -> right = insert(root -> right, key);
+		root -> right_child++;
+	}
 	else return root;
 
 	root -> height = max( height(root -> left), height(root -> right) ) + 1;
@@ -87,26 +103,34 @@ node *insert(node *root, int key) {
 	return root;
 }
 
-int count;
+short int flag;
 
-short int found;
-
-void find_by_key (node *root, int key) {
-	if ( (!found) && (root != NULL) )  {
-		find_by_key(root -> left, key);
-		count++;
-		if (root -> key == key) {
-			found = 1;
-			printf("%d\n", count);
-		}
-		find_by_key(root -> right, key);
-	}
+int find_by_key (node *root, int key) {
+	if (root != NULL) {
+		//printf("find by key (%d, %d)\n", root -> key, key);
+		if (key > root -> key) return root -> left_child + 1 + find_by_key(root -> right, key);
+		else if (key < root -> key) return find_by_key(root -> left, key);
+		else return root -> left_child;
+	} else {
+		//printf("currently NULL\n");
+		flag = 1;
+		return -1;
+	};
 }
 	
+void in_order (node *root) {
+	if (root != NULL) {
+		printf("%d %d %d\n", root -> key, root -> left_child, root -> right_child);
+		in_order(root -> left);
+		in_order(root -> right);
+	}
+}
+
 
 
 int main () {
 	//freopen("SDITSAVL.in", "r", stdin);
+	//freopen("SDITSAVL.ans", "w", stdout);
 	int n;
 	scanf("%d", &n);
 	node *root = NULL;
@@ -114,15 +138,20 @@ int main () {
 		short int op;
 		int num;
 		scanf("%hd%d", &op, &num);
-		if (op == 1) root = insert(root, num);
-		if (op == 2) {
-			count = 0;
-			found = 0;
-			find_by_key(root, num);
-			if (!found) printf("Data tidak ada\n");
+		if (op == 1) {
+			//printf("inserting %d\n", num);
+			root = insert(root, num);
 		}
+		if (op == 2) {
+			//printf("try to find %d\n", num);
+			flag = 0;
+			int rank = find_by_key(root, num) + 1;
+			if (flag) printf("Data tidak ada\n"); else printf("%d\n", rank);
+		}
+		//in_order(root);
 	}
 	//fclose(stdin);
+	//fclose(stdout);
 	return 0;
 }
 
