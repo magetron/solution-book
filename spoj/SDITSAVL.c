@@ -1,7 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "limits.h"
-#define max_q 2000005
 
 typedef struct node {
 	int key;
