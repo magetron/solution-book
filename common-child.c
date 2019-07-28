@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAX_LENGTH 5005
 
 char* readline();
 
@@ -14,12 +15,14 @@ int max (int a, int b) {
     return a > b ? a : b;
 }
 
+int mat[MAX_LENGTH][MAX_LENGTH];
+
 // Complete the commonChild function below.
 int commonChild(char* s1, char* s2) {
     int s1len = strlen(s1);
     int s2len = strlen(s2);
-    int mat[s1len + 1][s2len + 1];
-    for (int i = 0; i <= s1len; i++) mat[i][0] = 0;
+    memset(mat, 0, sizeof(mat));
+	for (int i = 0; i <= s1len; i++) mat[i][0] = 0;
     for (int i = 0; i <= s2len; i++) mat[0][i] = 0;
     for (int i = 1; i <= s1len; i++)
         for (int j = 1; j <= s2len; j++) {
@@ -32,17 +35,13 @@ int commonChild(char* s1, char* s2) {
 
 int main()
 {
-    FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
-
     char* s1 = readline();
 
     char* s2 = readline();
 
     int result = commonChild(s1, s2);
 
-    fprintf(fptr, "%d\n", result);
-
-    fclose(fptr);
+	printf("%d\n", result);
 
     return 0;
 }
