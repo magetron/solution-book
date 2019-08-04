@@ -39,7 +39,7 @@ int minlen (int *arr, int std) {
 
 
 int main () {
-	//freopen("b.in", "r", stdin);
+	freopen("b.in", "r", stdin);
 	int len;
 	scanf("%d\n", &len);
 	char *str = malloc(sizeof(char) * MAX_LEN);
@@ -61,7 +61,7 @@ int main () {
 		//printf("\n");
 		if (head == -1 && !valid(dict[i], std)) head = i;
 	}
-	//printf("%d\n", head);
+	printf("%d\n", head);
 	int tail = -1;
 	for (int i = len - 2; i >= 0; i--) {
 		int *cur = malloc(sizeof(int) * 4);
@@ -72,8 +72,9 @@ int main () {
 		}
 		free(cur);
 	}
-	//printf("%d\n", tail);
+	printf("%d\n", tail);
 	int min_len = minlen(dict[len - 1], std);
+	printf("%d\n", min_len);
 	int h = head;
 	int t = tail;
 	if (t - h + 1 < min_len) h -= min_len - (t - h + 1);
@@ -93,6 +94,6 @@ int main () {
 		t = tail;
 		//printf("\n");
 	}
-	//fclose(stdin);
+	fclose(stdin);
 	return 0;
 }
