@@ -17,6 +17,7 @@ void factorial (int n) {
 		
 		short int *new_result = new short int[MAX_RESULT_LENGTH];
 		for (int j = 0; j < MAX_RESULT_LENGTH; j++) new_result[j] = 0;
+		int new_result_length = 0;
 
 		for (int j = 0; j < MAX_N_LENGTH; j++) if (i_arr[j] > 0) {
 			short int *tmp_result = new short int[MAX_RESULT_LENGTH];
@@ -37,24 +38,24 @@ void factorial (int n) {
 					new_result[k] -= 10;
 				}	
 			}
-			if (new_result[tmp_result_length] > 0) result_length = tmp_result_length + 1;
-			else result_length = tmp_result_length;
+			if (new_result[tmp_result_length] > 0) new_result_length = tmp_result_length + 1;
+			else new_result_length = tmp_result_length;
 			delete [] tmp_result;
 		}
 
-		for (int j = 0; j < result_length; j++) result[j] = new_result[j];
+		for (int j = 0; j < new_result_length; j++) result[j] = new_result[j];
+		result_length = new_result_length;
 
 		delete [] new_result;
 		delete [] i_arr;
 	}
-	if (result[result_length - 1] == 0) result_length--;
 	for (int i = result_length - 1; i >= 0; i--) cout << result[i];
 	cout << endl;
 	delete [] result;
 }
 
 int main () {
-	// freopen("FCTRL2.in", "r", stdin);
+//	freopen("FCTRL2.in", "r", stdin);
 	int t;
 	cin >> t;
 	for (int i = 0; i < t; i++) {
@@ -62,6 +63,6 @@ int main () {
 		cin >> n;
 		factorial(n);
 	}
-	// fclose(stdin);
+//	fclose(stdin);
 }	
 
