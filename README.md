@@ -1,3 +1,3 @@
-# ACM
+# Solution Book
 
-This repo is where I write solutions for ACM-ICPC format problems.
+This repo is where I write solutions for all sorts of problems.
