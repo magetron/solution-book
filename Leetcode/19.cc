@@ -11,31 +11,26 @@ struct ListNode {
 
 class Solution {
 public:
-	int get_length(ListNode* head) {
-		int count = 0;
-		while (head) {
-			count++;
-			head = head -> next;
-		}
-        return count;
-	}
-
+	// Fast and slow algo
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-		int len = get_length(head) - n;
-		ListNode *ret = head;
-		ListNode *prev;
-		if (len > 0) {
-			while (len) {
-				len--;
-				prev = head;
-				head = head -> next;
-			}
-			prev -> next = head -> next;
-        	delete head;
-		} else {
-			ret = ret -> next;
-			delete head;
+    	ListNode* fast = head;
+		ListNode* slow = head;
+        ListNode* ret = head;
+		ListNode* prev;
+		int fast_count = 0;
+		while (fast && fast_count < n) {
+			fast_count++;
+			fast = fast -> next;
 		}
-		return ret;	
-    }
+		if (!fast) return head -> next;
+		while (fast) {
+			prev = slow;
+			slow = slow -> next;
+			fast = fast -> next;
+		}
+        prev -> next = slow -> next;
+        delete slow;
+        return ret;
+	}
 };
+
