@@ -2,36 +2,50 @@
 
 using namespace std;
 
-string convert(string s, int numRows) {
-	if (numRows == 1) return s;
-	string ans = "";
-	int len = s.length();
-	int gap = (numRows - 1) << 1;
-	for (int i = 0; i < numRows; i++) {
-		if (i == 0) {
-			for (int j = 0; j < len; j++) if (j % gap == 0) ans += s.at(j);
-			continue;
+class Node {
+	public:
+		int l;
+		int r;
+		Node (int ll, int rr) : l(ll), r(rr) { 
 		}
-		if (i == numRows - 1) {
-			for (int j = gap >> 1; j < len; j++) if (j % gap == gap >> 1) ans += s.at(j);
-			continue;
+};
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+		if (s.length() == 0) return "";
+		if (s.length() == 1) return s;
+        vector<Node> dict;
+		for (int i = 0; i < s.length() - 1; i++) {
+			if (i > 0 && s.at(i - 1) == s.at(i + 1))
+				dict.push_back(Node(i - 1, i + 1));
+			if (s.at(i) == s.at(i + 1))
+				dict.push_back(Node(i, i + 1));
 		}
-		int agap = gap - i * 2;
-		int bgap = gap - agap;
-		int j = i;
-		int count = 0;
-		while (j < len) {
-			ans += s.at(j);
-			if (count % 2 == 0) j += agap; else j += bgap;
-			count++;
+		if (dict.size() == 0) return string(1, s.at(0));
+		int max = 0;
+		int max_l;
+		for (auto it = dict.begin(); it != dict.end(); it++) {
+			Node n = *it;
+			while (n.l >= 0 && n.r < s.length() && s.at(n.l) == s.at(n.r)) { 
+				n.l--; n.r++; 
+			}
+			int len = (n.r - 1) - (n.l + 1) + 1;
+			if (len > max) {
+				max = len;
+				max_l = (n.l + 1);
+			}
 		}
-	}
-	return ans;
-}
+		return s.substr(max_l, max);
+    }
+};
 
 int main () {
-	string s("PAYPALISHIRING");
-	cout << convert(s, 4) << endl;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	string s("");
+	Solution sol;
+	cout << sol.longestPalindrome(s);
+
 	return 0;
 }
-
