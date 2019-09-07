@@ -13,7 +13,7 @@ class Solution {
 		}
 
 		short int isMatchHelper (string& s, string& p, int i, int j, short int** dp) {
-			cout << i << " " << j << endl;
+			//cout << i << " " << j << endl;
 			if (i > s.length() || j > p.length()) return 0;
 			if (dp[i][j] != -1) return dp[i][j];
 			if (j == p.length()) {
