@@ -5,13 +5,20 @@ using namespace std;
 vector<int> build_lps (string& p) {
 	vector<int> lps(p.length());
 	int i = 0;
+	lps[0] = 0;
 	int j = 1;
 	while (j < p.length()) {
-		if (p.at(i) == p.at(j)) {
-			lps[j] = lps[j - 1] + 1;
+		if (p.at(j) == p.at(i)) {
 			i++;
+			lps[j] = i;
+			j++;
+		} else {
+			if (i != 0) i = lps[i - 1];
+			else {
+				lps[j] = 0;
+				j++;
+			}
 		}
-		j++;
 	}
 	return lps;
 }
