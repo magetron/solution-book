@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 class Solution {
 public:
 
@@ -13,25 +12,32 @@ public:
 		int j = 1;
 		while (j < p.length()) {
 			if (p.at(j) == p.at(i)) {
-				lps[j] = lps[j - 1] + 1;
-				i++;
-			}
-			j++;
+                i++;
+				lps[j] = i;
+                j++;
+			} else {
+                if (i != 0) i = lps[i - 1];
+                else {
+                    lps[j] = 0;
+                    j++;
+                }
+            }
 		}
 		return lps;
 	}
 
 	int kmp (string& s, string& p, vector<int>& lps) {
 		int i = 0;
-		while (i < s.length() - p.length() + 1) {
-			//cout << i << endl;
-			int j = i;
-			int k = 0;
-			while (j < s.length() && k < p.length() && s.at(j) == p.at(k)) { 
-				j++; k++; 
+        int j = 0;
+		while (i < s.length()) {
+			while (i < s.length() && j < p.length() && s.at(i) == p.at(j)) { 
+				i++; j++; 
 			}
-			if (k == p.length()) return i;
-			else i += 1 + lps[k];
+            //cout << i << " " << j << endl;
+			if (j == p.length()) return i - p.length();
+			if (j != 0) j = lps[j - 1];
+        	else i++;
+            //cout << i << " " << j << endl;
 		}
 		return -1;
 	}
