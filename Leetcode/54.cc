@@ -14,7 +14,6 @@ public:
 		int tot = m * n;
 		vector<int> ans;
 		while (n > 1 && m > 1) {
-			cout << n << " " << m << endl;
 			for (int k = 0; k < n; k++) ans.push_back(matrix[i][j++]);
 			j--; i++;
 			for (int k = 0; k < m - 1; k++) ans.push_back(matrix[i++][j]);
