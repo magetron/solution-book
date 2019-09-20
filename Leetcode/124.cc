@@ -16,25 +16,21 @@ static int fast_io = []() {
 	return 0;
 } ();
 
-struct node {
-	int cur_sum;
-	int line_sum;
-	node (int cs, int ls) : cur_sum(cs), line_sum(ls) { }
-};
 
 class Solution {
 	public:
-		node helper (TreeNode* root) {
+		int helper (TreeNode* root, int& ans) {
 			if (root == nullptr) return node(INT_MIN, 0);
-			node l_node = helper(root -> left);
-			node r_node = helper(root -> right);
-			int ls = max(max(l_node.line_sum + root -> val, r_node.line_sum + root -> val), root -> val);
-			int cs = max(max(ls, l_node.line_sum + root -> val + r_node.line_sum), max(l_node.cur_sum, r_node.cur_sum));
-			return node(cs, ls);
+			int l_node = helper(root -> left);
+			int r_node = helper(root -> right);
+			int ls = max(max(l_node + root -> val, r_node + root -> val), root -> val);
+			ans = max(max(ls, ans), l_node + r_node + root -> val);
+			return ls;
 		}
 
 		int maxPathSum (TreeNode* root) {
-			node ans = helper(root);
-			return ans.cur_sum;
+			int ans = INT_MIN;;
+			helper(root, ans);
+			return ans;
 		}
 };
