@@ -1,6 +1,13 @@
 #include <bits/stdc++.h>
-
+#pragma GCC optimize ("Ofast")
 using namespace std;
+
+static int fast_io = [] () {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+	return 0;
+} ();
 
 class Solution {
 public:
@@ -8,15 +15,14 @@ public:
 	vector<vector<int>> dir{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
 	
-	bool dfs(vector<vector<char>>& board, vector<vector<bool>>& visited, string word, int i, int j, int m, int n, int pos) {
+	bool dfs(vector<vector<char>>& board, string word, int i, int j, int m, int n, int pos) {
 		if (pos == word.length()) return true;
 		if (i < 0 || j < 0 || i >= m || j >= n) return false;
 		//cout << pos << " " << board[i][j] << " " << (visited[i][j] ? "true" : "false") << endl;
 		if (board[i][j] != word[pos]) return false;
-		if (visited[i][j]) return false;
-		visited[i][j] = true;
-		for (int k = 0; k < 4; k++) if (dfs(board, visited, word, i + dir[k][0], j + dir[k][1], m, n, pos + 1)) return true;
-		visited[i][j] = false;
+		board[i][j] = '@';
+		for (int k = 0; k < 4; k++) if (dfs(board, word, i + dir[k][0], j + dir[k][1], m, n, pos + 1)) return true;
+		board[i][j] = word[pos];
 		return false;
 	}
 
@@ -27,10 +33,9 @@ public:
 		if (m == 0) return false;
 		int n = board[0].size();
 		if (n == 0) return false;
-		vector<vector<bool>> visited(m, vector<bool>(n, false));
 		for (int i = 0; i < m; i++)
 			for (int j = 0; j < n; j++) if (board[i][j] == first) {
-				bool res = dfs(board, visited, word, i, j, m, n, 0);
+				bool res = dfs(board, word, i, j, m, n, 0);
 				if (res) return true;
 			}
 		return false;
