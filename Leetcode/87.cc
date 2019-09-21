@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#pragma GCC optimize ("Ofast")
 
 using namespace std;
 
@@ -24,20 +25,17 @@ public:
 
 	bool helper (string& s1, int l1, int r1, string& s2, int l2, int r2) {
 		if (r1 <= l1 || r2 <= l2 || r1 - l1 != r2 - l2) return false;
-		for (int i = l1; i < r1; i++) cout << s1[i];
-		cout << endl;
-		for (int i = l2; i < r2; i++) cout << s2[i];
-		cout << endl;
-		cout << "----" << endl;
+
 		bool same = true;
 		for (int i = 0; i < r1 - l1; i++) if (s1[l1 + i] != s2[l2 + i]) { same = false; break; }
 		if (same) return true;
 		if (!isAnagram(s1, l1, r1, s2, l2, r2)) return false;
-		int i = l1 + (r1 - l1) / 2;	
-		bool res1 = helper(s1, l1, i, s2, l2, l2 + (i - l1)) && helper(s1, i, r1, s2, r2 - (r1 - i), r2);
-		if (res1) return true;
-		bool res2 = helper(s1, l1, i, s2, r2 - (i - l1), r2) && helper(s1, i, r1, s2, l2, l2 + (r1 - i));
-		if (res2) return true;
+		for (int i = l1; i < r1; i++) {
+			bool res1 = helper(s1, l1, i, s2, l2, l2 + (i - l1)) && helper(s1, i, r1, s2, r2 - (r1 - i), r2);
+			if (res1) return true;
+			bool res2 = helper(s1, l1, i, s2, r2 - (i - l1), r2) && helper(s1, i, r1, s2, l2, l2 + (r1 - i));
+			if (res2) return true;
+		}
 		return false;
 	}
 
