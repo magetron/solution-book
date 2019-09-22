@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#pragma GCC optimize ("Ofast")
 
 using namespace std;
 
@@ -7,7 +8,6 @@ static int fast_io = []() { ios_base::sync_with_stdio(false); cin.tie(nullptr); 
 class Solution {
 	public:
 		Node* connect(Node* root) {
-			Node* ret_root = root;
 			Node* head = nullptr;
 			Node* lead = nullptr;
 			Node* cur = root;
