@@ -12,21 +12,21 @@ static int fast_io = [] () {
 
 class Solution {
 public:
-	vector<string> helper(TreeNode* root) {
-        if (root == nullptr) return vector<string>();
-		if (!root -> left && !root -> right) return vector<string>{string(1, (char)(root -> val + 48))};
-		vector<string> left, right;
-		if (root -> left) left = helper(root -> left);
-		if (root -> right) right = helper(root -> right);
-		left.insert(left.end(), right.begin(), right.end());
-		for (string& s : left) s = (char)(root -> val + 48) + s;
-		return left;
+	void helper(TreeNode* root, int cur, int& ans) {
+		cur = cur * 10 + root -> val;
+		if (!root -> left && !root -> right) {
+			ans += cur;
+			return;
+		}
+		if (root -> left) helper(root -> left, cur, ans);
+		if (root -> right) helper(root -> right, cur, ans);
+		cur /= 10;
 	}
 
     int sumNumbers(TreeNode* root) {
-		auto arr = helper(root);
+        if (!root) return 0;
 		int ans = 0;
-		for (string s : arr) ans += stoi(s);
-		return ans;
+		helper(root, 0, ans);
+        return ans;
     }
 };
