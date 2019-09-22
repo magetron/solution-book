@@ -16,21 +16,20 @@ static int fast_io = []() {
 	return 0;
 } ();
 
-
 class Solution {
-	public:
-		int helper (TreeNode* root, int& ans) {
-			if (root == nullptr) return node(INT_MIN, 0);
-			int l_node = helper(root -> left);
-			int r_node = helper(root -> right);
-			int ls = max(max(l_node + root -> val, r_node + root -> val), root -> val);
-			ans = max(max(ls, ans), l_node + r_node + root -> val);
-			return ls;
-		}
+public:
+	int helper(TreeNode* root, int& ans) {
+		if (!root) return 0;
+		int l = helper(root -> left, ans);
+		int r = helper(root -> right, ans);
+		int ls = max(max(l + root -> val, r + root -> val), root -> val);
+		ans = max(ans, max(ls, l + root -> val + r));
+		return ls;
+	}
 
-		int maxPathSum (TreeNode* root) {
-			int ans = INT_MIN;;
-			helper(root, ans);
-			return ans;
-		}
+    int maxPathSum(TreeNode* root) {
+       	int ans = INT_MIN;
+		helper(root, ans);
+		return ans;
+    }
 };
