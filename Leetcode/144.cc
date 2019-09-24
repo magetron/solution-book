@@ -20,16 +20,19 @@ static int fast_io = [] () {
 class Solution {
 public:
 
-	void preorder(TreeNode* root, vector<int>& ans) {
-		if (!root) return;
-		ans.push_back(root -> val);
-		preorder(root -> left, ans);
-		preorder(root -> right, ans);
-	}
-
     vector<int> preorderTraversal(TreeNode* root) {
 		vector<int> ans;
-		preorder(root, ans);
+		stack<TreeNode *> st;
+		st.push(root);
+		while (!st.empty()) {
+			TreeNode* cur = st.top();
+			st.pop();
+			if (cur) {
+				ans.push_back(cur -> val);
+				st.push(cur -> right);
+				st.push(cur -> left);
+			}
+		}
 		return ans;
     }
 };

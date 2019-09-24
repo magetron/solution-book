@@ -1,28 +1,45 @@
 #include<bits/stdc++.h>
-#pragma GCC optimize ("Ofast")
-
 using namespace std;
 
 static int fast_io = [] () {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
 } ();
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
 class Solution {
 public:
 
-	void postorder(TreeNode* root, vector<int>& ans) {
-		if (root == nullptr) return;
-		postorder(root -> left, ans);
-		postorder(root -> right, ans);
-		ans.push_back(root -> val);
-	}
-
     vector<int> postorderTraversal(TreeNode* root) {
-    	vector<int> ans;
-		postorder(root, ans);
+        if (!root) return vector<int>();
+		vector<int> ans;
+		stack<TreeNode *> st;
+		st.push(root);
+		st.push(root);
+		while (!st.empty()) {
+			TreeNode* cur = st.top();
+			st.pop();
+			if (!st.empty() && st.top() == cur) {
+				if (cur -> right) {
+					st.push(cur -> right);
+					st.push(cur -> right);
+				}
+				if (cur -> left) {
+					st.push(cur -> left);
+					st.push(cur -> left);
+				}
+			} else ans.push_back(cur -> val);
+		}
 		return ans;
     }
 };
