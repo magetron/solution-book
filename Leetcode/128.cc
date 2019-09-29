@@ -1,55 +1,36 @@
-#include <bits/stdc++.h>
-#pragma optimize GCC ("Ofast");
+#include<bits/stdc++.h>
+#pragma GCC optimize ("Ofast")
 
 using namespace std;
 
 static int fast_io = [] () {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
 } ();
 
 class Solution {
-	public :
-		
-		int find(unordered_map<int, pair<int, int>>& pre, int k) {
-			int y = k;
-			while (pre[k].first != k) k = pre[k].first;
-			while (pre[y].first != k) {
-				int yy = pre[y].first;
-				pre[y].first = k;
-				y = yy;
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> dict(nums.begin(), nums.end());
+		int ans = 0;
+		for (int i : nums) 
+			if (dict.count(i)) {
+				dict.erase(i);
+				int prev = i - 1;
+				int succ = i + 1;
+				while (dict.count(prev)) {
+					dict.erase(prev);
+					prev--;
+				}
+				while (dict.count(succ)) {
+					dict.erase(succ);
+					succ++;
+				}
+				ans = max(ans, succ - prev - 1);
 			}
-			return k;
-		}
-
-		void unite(unordered_map<int, pair<int, int>>& pre, int a, int b) {
-			int ap = find(pre, a);
-			int bp = find(pre, b);
-			if (ap != bp) {
-				pre[bp].first = ap;
-				pre[ap].second += pre[bp].second;
-			}
-		}
-
-		int longestConsecutive(vector<int>& nums) {
-			unordered_map<int, pair<int, int>> pre;
-			for (int i : nums) {
-				auto found = pre.find(i);
-				if (found == pre.end()) pre[i] = {i, 1};
-			}
-			for (int i : nums) {
-				auto found1 = pre.find(i - 1);
-				auto found2 = pre.find(i + 1);
-				if (found1 != pre.end()) unite(pre, i, i - 1);
-				if (found2 != pre.end()) unite(pre, i, i + 1);
-			}
-			int ans = 0;
-			for (auto p : pre) if (p.first == p.second.first) ans = max(ans, p.second.second);
-			return ans;
-		}
-};	
-
-
+		return ans;
+    }
+};
 
