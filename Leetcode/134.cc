@@ -13,17 +13,23 @@ static int fast_io = [] () {
 class Solution {
 public:
     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
-		int gass = 0, lack = 0;
+		int sum_g = 0;
+		for (auto g : gas) sum_g += g;
+		int sum_c = 0;
+		for (auto c : cost) sum_c += c;
+		if (sum_c > sum_g) return -1;
+		int cur = 0;
+		int debt = 0;
 		int ans = 0;
-		for (int i = 0; i < gas.size(); i++) {
-			gass += gas[i] - cost[i];
-			if (gass < 0) {
-				lack += - gass;
-				gass = 0;
+		for (int i = 0; i < cost.size(); i++) {
+			cur += gas[i] - cost[i];
+			if (cur < 0) {
+				debt -= cur;
+				cur = 0;
 				ans = i + 1;
 			}
 		}
-		if (lack > gass) return -1; else return ans;
+		return (debt > cur ? -1 : ans);
     }
 };
 
