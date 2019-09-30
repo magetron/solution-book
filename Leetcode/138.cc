@@ -20,20 +20,25 @@ public:
 			cur -> next = cpy;
 			cur = cpy -> next;
 		}
-		cur = head;
-		Node* cpy_head = cur -> next;
+        cur = head;
+		Node* ans = cur -> next;
 		while (cur) {
-			Node* cpy = cur -> next;
-			cpy -> random = (cur -> random ? cur -> random -> next : nullptr);
-			cur = cpy -> next;
+			cur -> next -> random = (cur -> random ? cur -> random -> next : nullptr);
+            cur = cur -> next -> next;
 		}
-		cur = head;
-		while (cur) {
-			Node* cpy = cur -> next;
-			cur -> next = cpy -> next;
-			cpy -> next = (cur -> next ? cur -> next -> next : nullptr);
-			cur = cur -> next;
-		}
-		return cpy_head;
+        cur = head;
+        while (cur) {
+            Node *succ = cur -> next -> next;
+            if (!succ) {
+                cur -> next -> next = nullptr;
+                cur -> next = nullptr;
+                break;
+            }
+            cur -> next -> next = succ -> next;
+            cur -> next = succ;
+            cur = succ;
+        }
+		return ans;
     }
 };
+
