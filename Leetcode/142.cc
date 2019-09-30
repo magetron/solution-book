@@ -1,31 +1,35 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
+#include<bits/stdc++.h>
+#pragma GCC optimize ("Ofast")
+using namespace std;
+
+static int fast_io = [] () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
+} ();
+
 class Solution {
 public:
-    ListNode *detectCycle(ListNode *head) {
-		if (head == nullptr) return nullptr;
-    	ListNode *dummy = new ListNode(0);
-		dummy -> next = head;
-		ListNode *fast = dummy -> next -> next, *slow = dummy -> next;
-		while (fast != nullptr && slow != nullptr && fast != slow) {
+    inline ListNode *detectCycle(ListNode *head) {
+        if (!head) return nullptr;
+        ListNode* fast = head -> next, *slow = head;
+        if (!fast) return nullptr;
+		while (fast && fast != slow) {
 			fast = fast -> next;
-			if (fast == nullptr) break;
+			if (!fast) return nullptr;
 			fast = fast -> next;
 			slow = slow -> next;
 		}
-		if (fast == slow) {
-			slow = dummy;
-			while (slow != fast) {
-				slow = slow -> next;
-				fast = fast -> next;
-			}
-			return slow;
-		} else return nullptr;
+		if (!fast) return nullptr;
+        slow = head;
+		fast = fast -> next;
+		while (fast != slow) {
+			fast = fast -> next;
+			slow = slow -> next;
+		}
+		return fast;
     }
 };
+
+
