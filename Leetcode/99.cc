@@ -10,39 +10,45 @@ static int __ = [] () {
 	return 0;
 } ();
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
 class Solution {
 public:
     void recoverTree(TreeNode* root) {
-		TreeNode* cur = root, *prev = nullptr;
-		TreeNode* first = nullptr, *second = nullptr ;
-		while (cur) {
-			if (!cur -> left) {
-                //cout << cur -> val << " ";
-				if (prev && prev -> val >= cur -> val) {
-					if (!first) first = prev;
-					if (first) second = cur;
-				}
-				prev = cur;
-				cur = cur -> right;
-			} else {
-				TreeNode* l = cur -> left;
-				while (l -> right && l -> right != cur) l = l -> right;
-				if (!l -> right) {
-					l -> right = cur;
-					cur = cur -> left;
-				} else {
-					l -> right = nullptr;
-                    //cout << cur -> val << " ";
-					if (prev && prev -> val >= cur -> val) {
-						if (!first) first = prev;
-						if (first) second = cur;
-					}
-					prev = cur;
-					cur = cur -> right;
-				}
-			}
-		}
-		swap(first -> val, second -> val);
+        TreeNode* prev = nullptr;
+        TreeNode* first = nullptr, *second = nullptr;
+        while (root) {
+            if (!root -> left) {
+                if (!prev || prev -> val > root -> val) {
+                    if (!first) first = prev;
+                    if (first) second = root;
+                }
+                prev = root;
+                root = root -> right;
+            } else {
+                TreeNode* p = root -> left;
+                while (p -> right && p -> right != root) p = p -> right;
+                if (!p -> right) {
+                    p -> right = root;
+                    root = root -> left;
+                } else {
+                    p -> right = nullptr;
+                    if (!prev || prev -> val > root -> val) {
+                        if (!first) first = prev;
+                        if (first) second = root;
+                    }
+                    prev = root;
+                    root = root -> right;
+                }
+            }
+        }
+        swap(first -> val, second -> val);
     }
 };
-
