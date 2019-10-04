@@ -5,25 +5,41 @@ using namespace std;
 
 class Solution {
 public:
-    string shortestPalindrome(string s) {
-		reverse(s.begin(), s.end());
-        //cout << s << endl;
-		int pos = -1;
-		for (int b = 0; b < s.length(); b++) {
-			int i = b;
-			int j = s.length() - 1;
-			while (s[i] == s[j] && i < j) { i++; j--; }
-			if (j <= i) {
-				pos = b;
-				break;
+	
+	vector<int> build_lps (string& p) {
+		vector<int> lps(p.length());
+		int i = 0;
+		lps[0] = 0;
+		int j = 1;
+		while (j < p.length()) {
+			if (p.at(j) == p.at(i)) {
+				i++;
+				lps[j] = i;
+				j++;
+			} else if (i != 0) i = lps[i - 1];
+			else {
+				lps[j] = 0;
+				j++;
 			}
 		}
-		string astr = s.substr(0, pos);
-        //cout << pos << " " << astr << endl;
-		reverse(astr.begin(), astr.end());
-		s += astr;
-		reverse(s.begin(), s.end());
-		return s;
+		return lps;
+	}
+
+    string shortestPalindrome(string s) {
+		string s1 = s;
+		reverse(s1.begin(), s1.end());
+		string ss = s + "#" + s1;
+		auto lps = build_lps(ss);
+		//for (auto i : lps) cout << i << " "; cout << endl;
+		return s1.substr(0, s.length() - lps.back()) + s;
     }
 };
+
+int main () {
+	Solution s;
+	string st("aacecaaa");
+	cout << s.shortestPalindrome(st) << endl;
+	return 0;
+}
+
 
