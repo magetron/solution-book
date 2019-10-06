@@ -28,7 +28,7 @@ class Solution {
 public:
     Node* cloneGraph(Node* node) {
     	vector<bool> visited(101, false);
-		map<int, Node*> dict;
+		unordered_map<int, Node*> dict;
 		queue<Node*> q;
 		q.push(node);
 		visited[node -> val] = true;
