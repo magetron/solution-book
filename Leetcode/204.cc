@@ -10,20 +10,20 @@ static int fast_io = [] () {
 	return 0;
 } ();
 
-
 class Solution {
 public:
-	inline int sqr (int n) {
-		return n * n;
-	}
-
-    int countPrimes(int n) {
-		vector<bool> d(n + 1, true);
-		for (int i = 2; sqr(i) <= n; i++)
-			if (d[i]) 
-				for (int j = sqr(i); j <= n; j += i) b[j] = false;
-		int ans = 0;
-		for (int i = 2; i <= n; i++) if (d[i]) ans++;
-		return ans;
+    
+    inline int sqr (int n) {
+        return n * n;
     }
+    
+	int countPrimes(int n) {
+    	bitset<1 << 21> bs;
+		for (int i = 2; sqr(i) < n; i++) 
+			if (!bs[i])
+				for (int j = sqr(i); j < n; j += i) bs[j] = 1;
+		return max(n - (int)bs.count() - 2, 0);
+	}
 };
+
+
