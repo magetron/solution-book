@@ -10,13 +10,6 @@ static int fast_io = [] () {
 	return 0;
 } ();
 
-struct TreeNode {
-	int val;
-	TreeNode *left;
-	TreeNode *right;
-	TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
 class Solution {
 public:
 
@@ -38,10 +31,10 @@ public:
 	}
 
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-		if (p -> val > q -> val) swap(p, q);
 		TreeNode* ans;
 		find(root, p, q, ans);
 		return ans;
     }
 };
+
 
