@@ -13,19 +13,15 @@ static int fast_io = [] () {
 class Solution {
 public:
     int shortestDistance(vector<string>& words, string word1, string word2) {
-		unordered_map<string, vector<int>> dict;
-		for (int i = 0; i < words.size(); i++) dict[words[i]].push_back(i);
-		auto s1 = dict[word1];
-		auto s2 = dict[word2];
-		int i = 0;
-		int j = 0;
-		int ans = INT_MAX;
-		while (i < s1.size() && j < s2.size()) {
-			ans = min(ans, abs(s2[j] - s1[i]));
-			if (s2[j] < s1[i]) j++; else i++;
+    	int ans = INT_MAX;
+		int l1 = -1, l2 = -1;
+		for (int i = 0; i < words.size(); i++) {
+			if (words[i] == word1) l1 = i;
+			else if (words[i] == word2) l2 = i;
+			if (l1 != -1 && l2 != -1) ans = min(ans, abs(l2 - l1));
 		}
-		return ans;	
-    }
+		return ans;
+	}
 };
 
 int main () {
