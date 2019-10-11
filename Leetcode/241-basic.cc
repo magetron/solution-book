@@ -12,10 +12,8 @@ static int fast_io = [] () {
 
 class Solution {
 public:
-	map<pair<int, int>, vector<int>> dict;
 
 	vector<int> eval (string& s, int l, int r) {
-		if (!dict[{l, r}].empty()) return dict[{l, r}];
 		vector<int> ans;
 		for (int i = l; i <= r; i++) {
 			if (!isdigit(s[i])) {
@@ -36,13 +34,8 @@ public:
 						}
 			}
 		}
-		if (ans.empty()) {
-			dict[{l, r}] = {stoi(s.substr(l, r - l + 1))};
-			return dict[{l, r}];
-		} else {
-			dict[{l, r}] = ans;
-			return ans;
-		}
+		if (ans.empty()) return {stoi(s.substr(l, r - l + 1))};
+		else return ans;
 	}
 
     vector<int> diffWaysToCompute(string s) {
