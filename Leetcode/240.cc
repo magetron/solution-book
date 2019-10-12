@@ -13,17 +13,15 @@ static int fast_io = [] () {
 class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
-		int m = matrix.size();
+ 		int m = matrix.size();
 		if (!m) return false;
-		int n = matrix[0].size();
-		if (!n) return false;
-		int i = m - 1;
-		int j = 0;
-		while (i >= 0 && j < n) {
-			if (target == matrix[i][j]) return true;
-			if (target < matrix[i][j]) i--; else j++;
+        m--;
+		int n = 0;
+        while (m >= 0 && n < matrix[0].size()) {
+			if (matrix[m][n] == target) return true;
+			else if (matrix[m][n] > target) m--; else n++;
 		}
 		return false;
-	}
+    }
 };
 
