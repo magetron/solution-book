@@ -10,12 +10,6 @@ static int fast_io = [] () {
 	return 0;
 } ();
 
-struct Order {
-	bool operator () (const pair<int, int>& a, const pair<int, int>& b) const {
-		return a.second < b.second || (a.second == b.second && a.first < b.first);
-	}
-};
-
 class Solution {
 public:
     vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
@@ -27,11 +21,15 @@ public:
 			ap[i * 2 + 1].second = - buildings[i][2];
 		}
 		sort(ap.begin(), ap.end(), [] (const pair<int, int>& a, const pair<int, int>& b) -> bool {
-				if (a.first ==  b.first) return a.second > b.second;
-				else return a.first < b.first;
+				return a.first < b.first || (a.first == b.first && a.second > b.second);	
 				});
 		//for (auto p : ap) cout << p.first << " " << p.second << endl;
-		priority_queue<pair<int, int>, vector<pair<int, int>>, Order> pq;
+
+		auto pq_cmp = [] (const pair<int, int>& a, const pair<int, int>& b) -> bool {
+			return a.second < b.second || (a.second == b.second && a.first < b.first);
+		};
+
+		priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(pq_cmp)> pq(pq_cmp);
 		unordered_map<int, int> removal;
 		pq.push({0, 0});
 		vector<vector<int>> ans;
