@@ -11,7 +11,7 @@ static int fast_io = [] () {
 } ();
 
 // Forward declaration of isBadVersion API.
-bool isBadVersion(int version);
+inline bool isBadVersion(int version);
 
 class Solution {
 public:
