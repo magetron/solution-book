@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 #pragma GCC optimize ("Ofast")
-
+#define ll long long
 using namespace std;
 
 static int fast_io = [] () {
@@ -12,14 +12,14 @@ static int fast_io = [] () {
 
 class Solution {
 public:
-    
-    inline int get_id (long n, long t) {
-        return n >= 0 ? n / (t + 1) : (n + 1) / (t + 1) - 1;
+
+	inline int get_id (ll n, ll t) {
+		return (n >= 0 ? n / (t + 1) : n / (t + 1) - 1);
     }
-    
-   	bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
-        if (t < 0 || k == 0 || nums.size() == 0) return false;
-		unordered_map<int, long> dict;
+
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+		if (t < 0 || k == 0 || nums.size() == 0) return false;
+		unordered_map<int, ll> dict;
 		for (int i = 0; i < nums.size(); i++) {
 			int id = get_id(nums[i], t);
 			if (dict.find(id) != dict.end()) return true;
