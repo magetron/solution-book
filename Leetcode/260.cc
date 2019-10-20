@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 #pragma GCC optimize ("Ofast")
-
+#define ll long long
 using namespace std;
 
 static int fast_io = [] () {
@@ -13,15 +13,13 @@ static int fast_io = [] () {
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-		int fxor = 0;
-		for (int n : nums) fxor ^= n;
-		fxor &= (-fxor);
-		vector<int> ans{0, 0};
-		for (int n : nums) {
-			if (fxor & n) ans[0] ^= n;
-			else ans[1] ^= n;
-		}
-		return ans;
+		int diff = 0;
+		for (int n : nums) diff ^= n;
+		diff &= -diff;
+		int a = 0, b = 0;
+		for (int n : nums) if (n & diff) a ^= n; else b ^= n;
+		return {a, b};
     }
 };
+
 
