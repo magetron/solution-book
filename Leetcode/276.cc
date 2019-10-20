@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 #pragma GCC optimize ("Ofast")
-
+#define ll long long
 using namespace std;
 
 static int fast_io = [] () {
@@ -13,19 +13,18 @@ static int fast_io = [] () {
 class Solution {
 public:
     int numWays(int n, int k) {
-		if (n == 0) return 0;
-		else if (n == 1) return k;
-		int d = k * (k - 1);
-		int s = k;
+    	if (n == 0) return 0;
+		if (n == 1) return k;
+		int diff = k * (k - 1);
+		int same = k;
 		for (int i = 2; i < n; i++) {
-			int tmp = d;
-			d = (d + s) * (k - 1);
-			s = tmp;
+			int tmp = diff;
+			diff = (diff + same) * (k - 1);
+			same = tmp;
 		}
-		return s + d;
+		return diff + same;
     }
 };
-
 
 int main () {
 	Solution s;
