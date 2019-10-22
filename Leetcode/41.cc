@@ -1,24 +1,25 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
+#pragma GCC optimize ("Ofast")
 
 using namespace std;
 
+static int fast_io = [] () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
+} ();
+
 class Solution {
 public:
-	void print (vector<int>& a) {
-		for (auto i : a) cout << i << " ";
-		cout << endl;
-	}
-
     int firstMissingPositive(vector<int>& nums) {
-       for (auto& i : nums) if (i > nums.size() || i <= 0) i = 0;
-	   //print(nums);
-	   for (auto i : nums) if (i % (nums.size() + 1) > 0) nums[i % (nums.size() + 1) - 1] += nums.size() + 1;
-	   //print(nums);
-	   for (auto it = nums.begin(); it != nums.end(); it++) if (*it < nums.size() + 1) return it - nums.begin() + 1;
-	   return nums.size() + 1;
-	}
+        for (auto& n : nums) if (n <= 0 || n > nums.size()) n = 0;
+        int modulo = nums.size() + 1;
+        for (auto n : nums) if (n % modulo != 0) nums[n % modulo - 1] += modulo;
+        for (int i = 0; i < nums.size(); i++) if (nums[i] < modulo) return i + 1;
+        return modulo;
+    }
 };
-
 
 int main () {
 	Solution s;
