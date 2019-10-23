@@ -23,14 +23,11 @@ public:
 		for (int i = 0; i < m; i++)
 			for (int j = 0; j < n; j++) if (grid[i][j]) {
 				xps.push_back(i);
-			}
-		for (int j = 0; j < n; j++)
-			for (int i = 0; i < m; i++) if (grid[i][j]) {
 				yps.push_back(j);
 			}
 		//for (auto x : xps) cout << x << " "; cout << endl;
 		//for (auto y : yps) cout << y << " "; cout << endl;
-    	//sort(yps.begin(), yps.end());
+    	sort(yps.begin(), yps.end());
 		int x = xps[xps.size() / 2];
 		int y = yps[yps.size() / 2];
 		int ans = 0;
