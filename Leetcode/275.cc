@@ -13,23 +13,17 @@ static int fast_io = [] () {
 class Solution {
 public:
     int hIndex(vector<int>& citations) {
-		if (!citations.size()) return 0;
-		int l = 0;
-		int r = citations.size() - 1;
-		while (l <= r) {
+		if (citations.size() == 0) return 0;
+		if (citations.size() == 1) return min(1, citations.back());
+		reverse(citations.begin(), citations.end());
+		int l = 0, r = citations.size();
+		while (l < r) {
+            //cout << l << " " << r << endl;
 			int mid = l + (r - l) / 2;
-			int tmp = citations.size() - mid;
-			if (citations[mid] == tmp) return tmp;
-			else if (citations[mid] < tmp) l = mid + 1;
-			else r = mid - 1;
+			if (citations[mid] >= mid + 1) l = mid + 1;
+			else r = mid;
 		}
-		return citations.size() - l;
+		return max(l - 1, r);
     }
 };
 
-int main () {
-	Solution s;
-	vector<int> c{1};
-	cout << s.hIndex(c) << endl;
-	return 0;
-}
