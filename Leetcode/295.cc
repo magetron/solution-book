@@ -4,53 +4,38 @@
 using namespace std;
 
 static int fast_io = [] () {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
 } ();
-
 
 class MedianFinder {
 public:
-    /** initialize your data structure here. */
-    priority_queue<int, vector<int>, less<int>> l;
-	priority_queue<int, vector<int>, greater<int>> r;
-
-	MedianFinder() {
-		
-    }
-
+    priority_queue<int, vector<int>, less<int>> lq;
+    priority_queue<int, vector<int>, greater<int>> rq;
+    
+    MedianFinder() {}
+    
     void addNum(int num) {
-		if (l.size() == 0) {
-			l.emplace(num);
-		} else {
-			if (num <= l.top()) l.emplace(num);
-			else r.emplace(num);
-			if (l.size() - r.size() == 2) {
-				int val = l.top(); l.pop();
-				r.emplace(val);
-			} else if (r.size() - l.size() == 2) {
-				int val = r.top(); r.pop();
-				l.emplace(val);
-			}
-		}
+        if (lq.empty()) lq.emplace(num);
+        else {
+            if (num <= lq.top()) lq.emplace(num); else rq.emplace(num);
+            if (lq.size() >= rq.size() + 2) {
+                int val = lq.top();
+                lq.pop();
+                rq.emplace(val);
+            } else if (rq.size() >= lq.size() + 2) {
+                int val = rq.top();
+                rq.pop();
+                lq.emplace(val);
+            }
+        }
     }
-
+    
     double findMedian() {
-		int tot = l.size() + r.size();
-		if (tot % 2 == 1) {
-			return (l.size() > r.size() ? l.top() : r.top());
-		} else {
-			return (l.top() * 1.0 + r.top() * 1.0) / 2;
-		}
+        if ((lq.size() + rq.size()) % 2 == 0) return (lq.top() * 1.0 + rq.top() * 1.0) / 2;
+        else return (lq.size() > rq.size() ? lq.top() : rq.top());
     }
 };
-
-/**
- * Your MedianFinder object will be instantiated and called as such:
- * MedianFinder* obj = new MedianFinder();
- * obj->addNum(num);
- * double param_2 = obj->findMedian();
- */
 
