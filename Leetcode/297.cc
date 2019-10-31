@@ -4,10 +4,10 @@
 using namespace std;
 
 static int fast_io = [] () {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
 } ();
 
 /**
@@ -22,46 +22,37 @@ static int fast_io = [] () {
 class Codec {
 public:
 
-	void preorder(TreeNode* root, string& ans) {
-		if (!root) {
-			ans.push_back('@'); ans.push_back('|');
-			return;
-		}
-		ans += to_string(root -> val);
-		ans.push_back('|');
-		preorder(root -> left, ans);
-		preorder(root -> right, ans);
-		return;
-	}
-
+    // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-		string ans;
-		preorder(root, ans);
-		return ans;
+        if (!root) return "";
+        string ls = serialize(root -> left);
+        string rs = serialize(root -> right);
+        return to_string(root -> val) + "|" + ls + "|" + rs;
     }
 
-	TreeNode* construct(string& data, int& pos) {
-		int i = pos + 1;
-		while (data[i] != '|') i++;
-		string str = data.substr(pos, i - pos);
-		pos = i + 1;
-		if (str == "@") {
-			return nullptr;
-		} else {
-			TreeNode* root = new TreeNode(stoi(str));
-			root -> left = construct(data, pos);
-			root -> right = construct(data, pos);
-			return root;
-		}
-	}
-
+    
+    TreeNode* construct (string& data, int& pos) {
+        if (pos == data.length() || data[pos] == '|') {
+            pos += 1;
+            return nullptr;
+        }
+        int i = pos + 1;
+        while (data[i] != '|') i++;
+        string num = data.substr(pos, i - pos);
+        TreeNode* root = new TreeNode(stoi(num));
+        pos = i + 1;
+        root -> left = construct(data, pos);
+        root -> right = construct(data, pos);
+        return root;
+    }
+    
+    // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-		int pos = 0;
-		return construct(data, pos);
+        int pos = 0;
+        return construct(data, pos);
     }
 };
 
 // Your Codec object will be instantiated and called as such:
 // Codec codec;
 // codec.deserialize(codec.serialize(root));
-
