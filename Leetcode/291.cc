@@ -1,47 +1,48 @@
-#include<bits/stdc++.h>
+#include "bits/stdc++.h"
 #pragma GCC optimize ("Ofast")
 
 using namespace std;
 
 static int fast_io = [] () {
-	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
-	cout.tie(nullptr);
-	return 0;
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
 } ();
 
 class Solution {
 public:
-
-
-	bool match (string str, int i, string pattern, int j, vector<string>& dict, unordered_set<string>& allw) {
-		if (i == str.length() && j == pattern.length()) return true;
-		else if (i == str.length() || j == pattern.length()) return false;
-
-		if (dict[pattern[j] - 97] != "@") {
-			string s = dict[pattern[j] - 97];
-            //cout << s << endl;
-            //cout << str.find(s, i) << " " << i << endl;
-			if (str.find(s, i) == i) return match(str, i + s.length(), pattern, j + 1, dict, allw);
-			else return false;
-		}
-
-		for (int k = i; k < str.length(); k++) {
-			string s = str.substr(i, k - i + 1);
-			if (allw.find(s) != allw.end()) continue;
-			dict[pattern[j] - 97] = s;
-			allw.insert(s);
-			if (match(str, k + 1, pattern, j + 1, dict, allw)) return true;
-			dict[pattern[j] - 97] = "@";
-			allw.erase(s);
-		}	
-		return false;
-	}
-
+    
+    bool dfs (string& pattern, int pos, string& str, int spos, unordered_map<char, string>& dict, unordered_set<string>& diff) {
+        if (pos == pattern.length() && spos == str.length()) return true;
+        if (pos == pattern.length() || spos == str.length()) return false;
+        char pc = pattern[pos];
+        if (dict.find(pc) != dict.end()) {
+            string ss = dict[pc];
+            int j = spos, i = 0;
+            while (i < ss.length()) {
+                if (str[j] != ss[i]) return false;
+                i++; j++;
+            }
+            return dfs(pattern, pos + 1, str, j, dict, diff);
+        }
+        for (int i = spos; i < str.length(); i++) {
+            string ss = str.substr(spos, i - spos + 1);
+            if (diff.find(ss) != diff.end()) continue; else diff.insert(ss);
+            dict.insert({pc, ss});
+            auto res = dfs(pattern, pos + 1, str, spos + ss.length(), dict, diff);
+            if (res) return true;
+            else {
+                dict.erase(pc);
+                diff.erase(ss);
+            }
+        }
+        return false;
+    }
+    
     bool wordPatternMatch(string pattern, string str) {
-		vector<string> dict(26, "@");
-		unordered_set<string> allw;
-		return match(str, 0, pattern, 0, dict, allw);
+        unordered_map<char, string> dict;
+        unordered_set<string> diff;
+        return dfs(pattern, 0, str, 0, dict, diff);
     }
 };
-
