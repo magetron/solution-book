@@ -1,3 +1,15 @@
+#include<bits/stdc++.h>
+#pragma GCC optimize ("Ofast")
+
+using namespace std;
+
+static int fast_io = [] () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
+} ();
+
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -7,29 +19,30 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+
 class Solution {
 public:
     
-    inline void preorder(TreeNode* root, map<int, vector<pair<int, int>>>& dict, int cnt, int lvl) {
+    void dfs (TreeNode* root, int cnt, int depth, map<int, vector<pair<int, int>>>& dict) {
         if (!root) return;
-        dict[cnt].push_back({lvl, root -> val});
-        preorder(root -> left, dict, cnt - 1, lvl + 1);
-        preorder(root -> right, dict, cnt + 1, lvl + 1);    
+        dict[cnt].push_back({depth, root -> val});
+        dfs(root -> left, cnt - 1, depth + 1, dict);
+        dfs(root -> right, cnt + 1, depth + 1, dict);
     }
     
     vector<vector<int>> verticalOrder(TreeNode* root) {
-        if (!root) return {};
         map<int, vector<pair<int, int>>> dict;
-        preorder(root, dict, 0, 0);
+        dfs(root, 0, 0, dict);
         vector<vector<int>> ans;
-        for (auto& p : dict) {
-            sort(p.second.begin(), p.second.end(), [] (const pair<int, int>& a, const pair<int, int>& b) -> bool {
+        for (auto& v : dict) {
+            sort(v.second.begin(), v.second.end(), [] (const pair<int, int>&a, const pair<int, int>&b) -> bool {
                 return a.first < b.first;
             });
             ans.push_back({});
-            for (auto val : p.second) ans.back().push_back(val.second);            
+            for (auto n : v.second) {
+                ans.back().emplace_back(n.second);
+            }
         }
         return ans;
     }
-
 };
