@@ -55,13 +55,13 @@ public:
 				}
 			}
 		int ans = INT_MAX;
-		for (int i = 0; i < m; i++) {
+		/*for (int i = 0; i < m; i++) {
 			for (int j = 0; j < n; j++) cout << distance[i][j] << " ";
 			cout << endl;
-		}
+		}*/
 		for (int i = 0; i < m; i++)
 			for (int j = 0; j < n; j++) if (grid[i][j] == 0) ans = min(ans, distance[i][j]);
-		return (ans == INT_MAX ? 0 : ans);
+		return (ans == INT_MAX ? -1 : ans);
     }
 };
 
