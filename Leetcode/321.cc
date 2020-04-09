@@ -1,8 +1,6 @@
 #include<bits/stdc++.h>
 #pragma GCC optimize ("Ofast")
 
-#define si short int
-
 using namespace std;
 
 static int fast_io = [] () {
